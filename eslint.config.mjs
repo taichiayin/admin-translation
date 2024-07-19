@@ -1,7 +1,8 @@
-import globals from "globals";
-
+import globals from 'globals';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
-  {files: ["**/*.js"], languageOptions: {sourceType: "commonjs"}},
-  {languageOptions: { globals: globals.browser }},
+  { files: ['**/*.js'], languageOptions: { sourceType: 'commonjs' } },
+  { languageOptions: { globals: globals.browser } },
+  eslintConfigPrettier,
 ];
