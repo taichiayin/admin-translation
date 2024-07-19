@@ -1,0 +1,11 @@
+.DS_Store
+*.log
+**/node_modules/*
+.vscode/launch.json
+.env
+#eslintrc
+eslintrc
+server/src/servers/dataService/swagger-output.json
+package-lock.json
+
+.env*.prod
