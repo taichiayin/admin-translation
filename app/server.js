@@ -3,9 +3,11 @@ const config = require('./config/config');
 const errorHandler = require('./utils/errorHandler');
 // const db = require('./utils/db');
 const logger = require('./utils/logger');
+const verifyUserToken = require('./middleware/verifyUserToken');
 
 const userRouter = require('./routes/user');
 const platformRouter = require('./routes/platform');
+const formRouter = require('./routes/formRouter');
 
 const app = express();
 
@@ -17,8 +19,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// 平台單獨功能，比如登入
 app.use('/', platformRouter);
-app.use('/user', userRouter);
+app.use('/user', verifyUserToken, userRouter);
+app.use('/form', verifyUserToken, formRouter);
+
+// app.use('/hello', verifyUserToken, (req, res) => {
+//   res.send('Hello!');
+// });
 
 app.use('/yeah', (req, res) => {
   res.send('Yeah!');
