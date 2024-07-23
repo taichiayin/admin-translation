@@ -154,38 +154,73 @@ class Forms {
   }
 
   // 查找表單
-  static async findAll({ formNumber, formStatus, platformTypeId, zhCN }) {
+  static async findAll({ formNumber, act, formStatus, platformTypeId, zhCN }) {
     // Construct the base SQL query
     let sql = `SELECT * FROM translation.flowForms WHERE 1=1`;
     const conditions = [];
     const values = [];
-
-    // Add conditions dynamically based on provided arguments
-    if (formNumber !== undefined) {
-      conditions.push(`formNumber = ?`);
-      values.push(formNumber);
-    }
-    if (formStatus !== undefined) {
-      conditions.push(`formStatus = ?`);
-      values.push(formStatus);
-    }
-    if (platformTypeId !== undefined) {
-      conditions.push(`platformTypeId = ?`);
-      values.push(platformTypeId);
-    }
-    if (zhCN !== undefined) {
-      conditions.push(`zhCN = ?`);
-      values.push(zhCN);
-    }
-
-    // Combine the conditions with the base SQL query
-    if (conditions.length) {
-      sql += ' AND ' + conditions.join(' AND ');
-    }
-
     try {
-      const [results] = await mysqlPool.query(sql, values);
-      return { code: 0, message: 'success', data: results };
+      // Add conditions dynamically based on provided arguments
+      if (formNumber) {
+        conditions.push(`formNumber = ?`);
+        values.push(formNumber);
+      }
+      if (formStatus !== undefined) {
+        conditions.push(`formStatus = ?`);
+        values.push(formStatus);
+      }
+      if (platformTypeId !== undefined) {
+        conditions.push(`platformTypeId = ?`);
+        values.push(platformTypeId);
+      }
+      if (zhCN) {
+        conditions.push(`zhCN LIKE ?`);
+        values.push(`%${zhCN}%`);
+      }
+      if (act) {
+        conditions.push(`act = ?`);
+        values.push(act);
+      }
+
+      // Combine the conditions with the base SQL query
+      if (conditions.length) {
+        sql += ' AND ' + conditions.join(' AND ');
+      }
+
+      const results = await mysqlPool.query(sql, values);
+
+      return results;
+    } catch (error) {
+      throw new Error('Error finding flowForms: ' + error.message);
+    }
+  }
+
+  // find by formNumber
+  static async findByFormNumber(formNumber) {
+    try {
+      const results = await mysqlPool.query('SELECT * FROM translation.flowForms WHERE formNumber = ?', [formNumber]);
+      return results;
+    } catch (error) {
+      throw new Error('Error finding flowForms: ' + error.message);
+    }
+  }
+
+  // 駁回
+  static async rejectForm({ formNumber, updateDate, updateUser }) {
+    try {
+      await mysqlPool.query('UPDATE translation.flowForms SET formStatus = 3, updateDate = ?, updateUser = ? WHERE formNumber = ?', [updateDate, updateUser, formNumber]);
+      return { code: 0, message: 'success' };
+    } catch (error) {
+      throw new Error('Error finding flowForms: ' + error.message);
+    }
+  }
+
+
+  // 撤單
+  static async cancelForm({ formNumber, updateDate, updateUser }) {
+    try {
+      await mysqlPool.query('UPDATE translation.flowForms SET formStatus = 4, updateDate = ?, updateUser = ? WHERE formNumber = ?', [updateDate, updateUser, formNumber]);
+      return { code: 0, message: 'success' };
     } catch (error) {
       throw new Error('Error finding flowForms: ' + error.message);
     }

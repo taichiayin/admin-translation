@@ -6,6 +6,7 @@ const JWT_SECRET = config.jwt_secret;
 // const SALT = config.secret;
 const expiresIn = config.exp;
 
+
 function generateUserToken(account) {
   // 創建 JWT payload
   const payload = {

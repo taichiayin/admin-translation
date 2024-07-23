@@ -5,6 +5,12 @@ module.exports = Object.freeze({
     secret: process.env.PLATFORM_SECRET_KEY,
     jwt_secret: process.env.PLATFORM_JWT_SECRET_KEY,
     exp: process.env.PLATFORM_JWT_EXPIRES_IN,
+    translationKey: process.env.PLATFORM_TRANSLATION_API_KEY,
+    translationUrl: process.env.PLATFORM_TRANSLATION_API_URL,
+    translationRegion: process.env.PLATFORM_TRANSLATION_API_REGION,
+    translationOutputLang: process.env.PLATFORM_TRANSLATION_OUTPUT_LANG,
+    translationInputLang: process.env.PLATFORM_TRANSLATION_INPUT_LANG,
+    translationApiVer: process.env.PLATFORM_TRANSLATION_API_VERSION,
   },
   db: {
     user: process.env.DEFAULT_DB_MASTER_USER,
@@ -16,4 +22,5 @@ module.exports = Object.freeze({
     connectionLimit: 10,
     queueLimit: 0,
   },
+  translateLang:['PT-BR', 'vi',]
 });

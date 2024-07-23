@@ -5,9 +5,10 @@ const errorHandler = require('./utils/errorHandler');
 const logger = require('./utils/logger');
 const verifyUserToken = require('./middleware/verifyUserToken');
 
-const userRouter = require('./routes/user');
-const platformRouter = require('./routes/platform');
-const formRouter = require('./routes/formRouter');
+const userRoute = require('./routes/userRoute');
+const platformRoute = require('./routes/platformRoute');
+const formRoute = require('./routes/formRoute');
+const translatorRoute = require('./routes/translatorRoute');
 
 const app = express();
 
@@ -20,9 +21,10 @@ app.use((req, res, next) => {
 });
 
 // 平台單獨功能，比如登入
-app.use('/', platformRouter);
-app.use('/user', verifyUserToken, userRouter);
-app.use('/form', verifyUserToken, formRouter);
+app.use('/', platformRoute);
+app.use('/user', verifyUserToken, userRoute);
+app.use('/form', verifyUserToken, formRoute);
+app.use('/translator', verifyUserToken, translatorRoute)
 
 // app.use('/hello', verifyUserToken, (req, res) => {
 //   res.send('Hello!');

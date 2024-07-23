@@ -18,6 +18,11 @@ exports.login = async (data) => {
       return { code: 1, message: '帳號密碼錯誤' };
     }
 
+    // 檢查帳號是否停用
+    if(user.disable === 1) {
+      return { code: 1, message: '帳號已停用' };
+    }
+
     // 製作 token
     const token = generateUserToken(account);
 
